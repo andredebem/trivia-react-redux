@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 // import PropTypes from 'prop-types'
 
 export default class Login extends Component {
@@ -43,7 +43,6 @@ export default class Login extends Component {
     }, () => this.validateNameAndEmail());
   }
 
-
   render() {
     const { invalid } = this.state;
     return (
@@ -54,7 +53,7 @@ export default class Login extends Component {
             data-testid="input-player-name"
             type="text"
             name="name"
-            onChange={ this.handleChange } 
+            onChange={ this.handleChange }
           />
         </label>
         <label htmlFor="email">
@@ -63,15 +62,15 @@ export default class Login extends Component {
             data-testid="input-gravatar-email"
             type="email"
             name="email"
-            onChange={ this.handleChange } 
+            onChange={ this.handleChange }
           />
         </label>
-        <button 
-          type="button" 
-          data-testid="btn-play" 
-          disabled={ invalid } 
+        <button
+          type="button"
+          data-testid="btn-play"
+          disabled={ invalid }
         >
-        Jogar
+          Jogar
         </button>
       </form>
     );
