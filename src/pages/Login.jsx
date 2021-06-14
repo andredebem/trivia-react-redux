@@ -45,6 +45,7 @@ export default class Login extends Component {
 
 
   render() {
+    const { invalid } = this.state;
     return (
       <form>
         <label htmlFor="name">
@@ -53,6 +54,7 @@ export default class Login extends Component {
             data-testid="input-player-name"
             type="text"
             name="name"
+            onChange={ this.handleChange } 
           />
         </label>
         <label htmlFor="email">
@@ -61,9 +63,16 @@ export default class Login extends Component {
             data-testid="input-gravatar-email"
             type="email"
             name="email"
+            onChange={ this.handleChange } 
           />
         </label>
-        <button type="button">Jogar</button>
+        <button 
+          type="button" 
+          data-testid="btn-play" 
+          disabled={ invalid } 
+        >
+        Jogar
+        </button>
       </form>
     );
   }
