@@ -56,8 +56,16 @@ class Login extends Component {
     const { fetchTokenToState } = this.props;
     await fetchTokenToState();
     const { token } = this.props;
-    console.log(token);
+    const { email, name } = this.state;
+    const state = {
+      player: {
+        name,
+        gravatarEmail: email,
+        score: 0,
+      },
+    };
     localStorage.setItem('token', token);
+    localStorage.setItem('state', JSON.stringify(state));
     this.setState({
       redirect: true,
     });

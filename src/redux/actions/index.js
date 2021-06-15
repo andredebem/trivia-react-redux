@@ -1,3 +1,3 @@
-const REQUEST_TOKEN = 'REQUEST_TOKEN';
+export const REQUEST_TOKEN = 'REQUEST_TOKEN';
 
-export default REQUEST_TOKEN;
+export const REQUEST_GRAVATAR = 'REQUEST_GRAVATAR';
