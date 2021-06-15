@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Redirect } from 'react-router';
 import { connect } from 'react-redux';
 import { fetchToken } from '../redux/actions/tokenAction';
 
@@ -11,6 +12,7 @@ class Login extends Component {
       name: '',
       email: '',
       invalid: true,
+      redirect: false,
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -47,14 +49,21 @@ class Login extends Component {
   }
 
   async saveToken() {
-    const { fetchTokenToState, token } = this.props;
+    const { fetchTokenToState } = this.props;
     await fetchTokenToState();
+    const { token } = this.props;
+    console.log(token);
     localStorage.setItem('token', token);
-
+    this.setState({
+      redirect: true,
+    });
   }
 
   render() {
-    const { invalid } = this.state;
+    const { invalid, redirect } = this.state;
+    if (redirect) {
+      return <Redirect to="/questions" />;
+    }
     return (
       <form>
         <label htmlFor="name">
@@ -79,7 +88,7 @@ class Login extends Component {
           type="button"
           data-testid="btn-play"
           disabled={ invalid }
-          onClick={  }
+          onClick={ () => this.saveToken() }
         >
           Jogar
         </button>
@@ -90,7 +99,7 @@ class Login extends Component {
 
 const mapStateToProps = (state) => ({
   token: state.token.token,
-})
+});
 
 const mapDispatchToProps = (dispatch) => ({
   fetchTokenToState: () => dispatch(fetchToken()),
@@ -98,6 +107,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 Login.propTypes = {
   fetchTokenToState: PropTypes.func.isRequired,
+  token: PropTypes.string.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);
