@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { fetchToken } from '../redux/actions/tokenAction';
 
@@ -43,9 +44,12 @@ class Login extends Component {
   }
 
   handleChange({ target }) {
-    this.setState({
-      [target.name]: target.value,
-    }, () => this.validateNameAndEmail());
+    this.setState(
+      {
+        [target.name]: target.value,
+      },
+      () => this.validateNameAndEmail(),
+    );
   }
 
   async saveToken() {
@@ -92,6 +96,11 @@ class Login extends Component {
         >
           Jogar
         </button>
+        <Link to="/settings">
+          <button type="button" data-testid="btn-settings">
+            Configurações
+          </button>
+        </Link>
       </form>
     );
   }

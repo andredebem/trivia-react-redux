@@ -3,10 +3,6 @@ import React, { Component } from 'react';
 
 export default class Perguntas extends Component {
   render() {
-    return (
-      <div>
-        Perguntas
-      </div>
-    );
+    return <div>oi</div>;
   }
 }
