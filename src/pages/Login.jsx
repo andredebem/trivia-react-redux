@@ -1,16 +1,17 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { Redirect } from 'react-router';
-import { connect } from 'react-redux';
-import { fetchToken } from '../redux/actions/tokenAction';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { Redirect } from "react-router";
+import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { fetchToken } from "../redux/actions/tokenAction";
 
 class Login extends Component {
   constructor() {
     super();
 
     this.state = {
-      name: '',
-      email: '',
+      name: "",
+      email: "",
       invalid: true,
       redirect: false,
     };
@@ -43,9 +44,12 @@ class Login extends Component {
   }
 
   handleChange({ target }) {
-    this.setState({
-      [target.name]: target.value,
-    }, () => this.validateNameAndEmail());
+    this.setState(
+      {
+        [target.name]: target.value,
+      },
+      () => this.validateNameAndEmail()
+    );
   }
 
   async saveToken() {
@@ -53,7 +57,7 @@ class Login extends Component {
     await fetchTokenToState();
     const { token } = this.props;
     console.log(token);
-    localStorage.setItem('token', token);
+    localStorage.setItem("token", token);
     this.setState({
       redirect: true,
     });
@@ -72,7 +76,7 @@ class Login extends Component {
             data-testid="input-player-name"
             type="text"
             name="name"
-            onChange={ this.handleChange }
+            onChange={this.handleChange}
           />
         </label>
         <label htmlFor="email">
@@ -81,17 +85,22 @@ class Login extends Component {
             data-testid="input-gravatar-email"
             type="email"
             name="email"
-            onChange={ this.handleChange }
+            onChange={this.handleChange}
           />
         </label>
         <button
           type="button"
           data-testid="btn-play"
-          disabled={ invalid }
-          onClick={ () => this.saveToken() }
+          disabled={invalid}
+          onClick={() => this.saveToken()}
         >
           Jogar
         </button>
+        <Link to="/settings">
+          <button type="button" data-testid="btn-settings">
+            Configurações
+          </button>
+        </Link>
       </form>
     );
   }
