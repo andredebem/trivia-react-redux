@@ -1,7 +1,7 @@
 import REQUEST_TOKEN from '../actions/index';
 
 const INITIAL_STATE = {
-  objToken: {},
+  token: '',
 };
 
 const token = (state = INITIAL_STATE, action) => {
@@ -9,7 +9,7 @@ const token = (state = INITIAL_STATE, action) => {
   case REQUEST_TOKEN:
     return {
       ...state,
-      objToken: action.payload.objToken,
+      token: action.payload.token,
     };
   default:
     return state;

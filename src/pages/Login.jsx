@@ -15,6 +15,7 @@ class Login extends Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.validateNameAndEmail = this.validateNameAndEmail.bind(this);
+    this.saveToken = this.saveToken.bind(this);
   }
 
   validateEmail(mail) {
@@ -45,9 +46,15 @@ class Login extends Component {
     }, () => this.validateNameAndEmail());
   }
 
+  async saveToken() {
+    const { fetchTokenToState, token } = this.props;
+    await fetchTokenToState();
+    localStorage.setItem('token', token);
+
+  }
+
   render() {
     const { invalid } = this.state;
-    const { fetchObjToken } = this.props;
     return (
       <form>
         <label htmlFor="name">
@@ -72,7 +79,7 @@ class Login extends Component {
           type="button"
           data-testid="btn-play"
           disabled={ invalid }
-          onClick={ () => fetchObjToken() }
+          onClick={  }
         >
           Jogar
         </button>
@@ -81,12 +88,16 @@ class Login extends Component {
   }
 }
 
+const mapStateToProps = (state) => ({
+  token: state.token.token,
+})
+
 const mapDispatchToProps = (dispatch) => ({
-  fetchObjToken: () => dispatch(fetchToken()),
+  fetchTokenToState: () => dispatch(fetchToken()),
 });
 
 Login.propTypes = {
-  fetchObjToken: PropTypes.func.isRequired,
+  fetchTokenToState: PropTypes.func.isRequired,
 };
 
-export default connect(null, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
