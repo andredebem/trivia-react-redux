@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import md5 from 'crypto-js/md5';
 // import PropTypes from 'prop-types'
+// Iniciando Requisito 5
 
 export default class Perguntas extends Component {
   constructor() {
