@@ -1,4 +1,4 @@
-import REQUEST_TOKEN from '../actions/index';
+import { REQUEST_TOKEN } from '../actions/index';
 
 const INITIAL_STATE = {
   token: '',

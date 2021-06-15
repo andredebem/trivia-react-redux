@@ -1,4 +1,4 @@
-import REQUEST_TOKEN from './index';
+import { REQUEST_TOKEN } from './index';
 
 export const saveToken = (token) => ({
   type: REQUEST_TOKEN,
