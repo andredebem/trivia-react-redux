@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
-// import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
+import { Redirect } from 'react-router';
+import { connect } from 'react-redux';
+import { fetchToken } from '../redux/actions/tokenAction';
 
-export default class Login extends Component {
+class Login extends Component {
   constructor() {
     super();
 
@@ -9,10 +12,12 @@ export default class Login extends Component {
       name: '',
       email: '',
       invalid: true,
+      redirect: false,
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.validateNameAndEmail = this.validateNameAndEmail.bind(this);
+    this.saveToken = this.saveToken.bind(this);
   }
 
   validateEmail(mail) {
@@ -43,8 +48,22 @@ export default class Login extends Component {
     }, () => this.validateNameAndEmail());
   }
 
+  async saveToken() {
+    const { fetchTokenToState } = this.props;
+    await fetchTokenToState();
+    const { token } = this.props;
+    console.log(token);
+    localStorage.setItem('token', token);
+    this.setState({
+      redirect: true,
+    });
+  }
+
   render() {
-    const { invalid } = this.state;
+    const { invalid, redirect } = this.state;
+    if (redirect) {
+      return <Redirect to="/questions" />;
+    }
     return (
       <form>
         <label htmlFor="name">
@@ -69,6 +88,7 @@ export default class Login extends Component {
           type="button"
           data-testid="btn-play"
           disabled={ invalid }
+          onClick={ () => this.saveToken() }
         >
           Jogar
         </button>
@@ -76,3 +96,18 @@ export default class Login extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => ({
+  token: state.token.token,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  fetchTokenToState: () => dispatch(fetchToken()),
+});
+
+Login.propTypes = {
+  fetchTokenToState: PropTypes.func.isRequired,
+  token: PropTypes.string.isRequired,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
