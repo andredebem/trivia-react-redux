@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-// import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { fetchToken } from '../redux/actions/tokenAction';
 
-export default class Login extends Component {
+class Login extends Component {
   constructor() {
     super();
 
@@ -45,6 +47,7 @@ export default class Login extends Component {
 
   render() {
     const { invalid } = this.state;
+    const { fetchObjToken } = this.props;
     return (
       <form>
         <label htmlFor="name">
@@ -69,6 +72,7 @@ export default class Login extends Component {
           type="button"
           data-testid="btn-play"
           disabled={ invalid }
+          onClick={ () => fetchObjToken() }
         >
           Jogar
         </button>
@@ -76,3 +80,13 @@ export default class Login extends Component {
     );
   }
 }
+
+const mapDispatchToProps = (dispatch) => ({
+  fetchObjToken: () => dispatch(fetchToken()),
+});
+
+Login.propTypes = {
+  fetchObjToken: PropTypes.func.isRequired,
+};
+
+export default connect(null, mapDispatchToProps)(Login);
