@@ -25,7 +25,7 @@ export default class Perguntas extends Component {
   }
 
   getImageGravatar(hashEmail) {
-    const link = `https://www.gravatar.com/avatar/${hashEmail} `;
+    const link = `https://www.gravatar.com/avatar/${hashEmail}`;
     this.setState({
       avatarLink: link,
     });
