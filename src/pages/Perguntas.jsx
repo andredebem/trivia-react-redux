@@ -40,7 +40,8 @@ class Perguntas extends Component {
   }
 
   setIntervalState() {
-    const intervalId = setInterval(this.timer, 1000);
+    const ONE_SECOND = 1000;
+    const intervalId = setInterval(this.timer, ONE_SECOND);
     this.setState({ intervalId });
   }
 
@@ -154,7 +155,7 @@ Perguntas.propTypes = {
   token: PropTypes.string.isRequired,
 };
 
-{ /* <html>
+/* <html>
     <head>
         <title>Page Title</title>
     </head>
@@ -167,6 +168,6 @@ Perguntas.propTypes = {
 setInterval(() => (i==msgs.length)?(i=0):(head.innerHTML = msgs[++i]), 2000);
        </script>
     </body>
-</html> */ }
+</html> */
 
 export default connect(mapStateTopProps, null)(Perguntas);
