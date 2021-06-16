@@ -27,6 +27,7 @@ class Perguntas extends Component {
     this.changeClassNameCorrect = this.changeClassNameCorrect.bind(this);
     this.changeClassNameIncorrect = this.changeClassNameIncorrect.bind(this);
     this.changeAnswerState = this.changeAnswerState.bind(this);
+    this.changeDisabled = this.changeDisabled.bind(this);
   }
 
   componentDidMount() {
@@ -105,6 +106,14 @@ class Perguntas extends Component {
     });
   }
 
+  changeDisabled() {
+    const { count } = this.state;
+    if (count === 0) {
+      return true;
+    }
+    return false;
+  }
+
   renderQuestions() {
     const { questions } = this.state;
     return questions
@@ -120,6 +129,7 @@ class Perguntas extends Component {
           if (answer === correctAnswer) {
             return (
               <button
+                disabled={ this.changeDisabled() }
                 className={ this.changeClassNameCorrect() }
                 onClick={ () => this.changeAnswerState() }
                 key={ answer }
@@ -132,6 +142,7 @@ class Perguntas extends Component {
           }
           return (
             <button
+              disabled={ this.changeDisabled() }
               className={ this.changeClassNameIncorrect() }
               onClick={ () => this.changeAnswerState() }
               key={ answer }
