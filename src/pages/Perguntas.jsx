@@ -118,7 +118,8 @@ class Perguntas extends Component {
   changeScoreLocalStorage(difficulty) {
     let difficultyNumber = 0;
     if (difficulty === 'hard') {
-      difficultyNumber = 3;
+      const THREE = 3;
+      difficultyNumber = THREE;
     } if (difficulty === 'medium') {
       difficultyNumber = 2;
     } if (difficulty === 'easy') {
@@ -127,11 +128,10 @@ class Perguntas extends Component {
     const { count } = this.state;
     const points = 10;
     const result = points + (count * difficultyNumber);
-    const state = JSON.parse(localStorage.getItem('state'));
-    let { player: { score } } = state;
-    const newScore = result + score;
-    score = newScore;
-    localStorage.setItem('state', JSON.stringify(state));
+    const stateObject = JSON.parse(localStorage.getItem('state'));
+    const { player: { score } } = stateObject;
+    stateObject.player.score = result + score;
+    localStorage.setItem('state', JSON.stringify(stateObject));
   }
 
   renderQuestions() {
@@ -144,7 +144,6 @@ class Perguntas extends Component {
         const magicNumber = 0.5;
         const answers = (incorrectAnswer.concat(correctAnswer))
           .sort(() => Math.random() - magicNumber);
-        // Referência da função de randomizar o array: https://flaviocopes.com/how-to-shuffle-array-javascript/
         const renderAnswers = answers.map((answer, index2) => {
           if (answer === correctAnswer) {
             return (
@@ -185,6 +184,8 @@ class Perguntas extends Component {
         );
       });
   }
+
+  // Referência da função de randomizar o array: https://flaviocopes.com/how-to-shuffle-array-javascript/
 
   render() {
     const { avatarLink, name, score, questions, count } = this.state;
