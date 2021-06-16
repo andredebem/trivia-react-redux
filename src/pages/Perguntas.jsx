@@ -28,6 +28,7 @@ class Perguntas extends Component {
     this.changeClassNameIncorrect = this.changeClassNameIncorrect.bind(this);
     this.changeAnswerState = this.changeAnswerState.bind(this);
     this.changeDisabled = this.changeDisabled.bind(this);
+    this.changeScoreLocalStorage = this.changeScoreLocalStorage.bind(this);
   }
 
   componentDidMount() {
@@ -114,24 +115,45 @@ class Perguntas extends Component {
     return false;
   }
 
+  changeScoreLocalStorage(difficulty) {
+    let difficultyNumber = 0;
+    if (difficulty === 'hard') {
+      const THREE = 3;
+      difficultyNumber = THREE;
+    } if (difficulty === 'medium') {
+      difficultyNumber = 2;
+    } if (difficulty === 'easy') {
+      difficultyNumber = 1;
+    }
+    const { count } = this.state;
+    const points = 10;
+    const result = points + (count * difficultyNumber);
+    const stateObject = JSON.parse(localStorage.getItem('state'));
+    const { player: { score } } = stateObject;
+    stateObject.player.score = result + score;
+    localStorage.setItem('state', JSON.stringify(stateObject));
+  }
+
   renderQuestions() {
     const { questions } = this.state;
     return questions
       .filter((question, index) => index === 0)
       .map(({
-        category, question, correct_answer: correctAnswer,
+        category, difficulty, question, correct_answer: correctAnswer,
         incorrect_answers: incorrectAnswer }, index) => {
         const magicNumber = 0.5;
         const answers = (incorrectAnswer.concat(correctAnswer))
           .sort(() => Math.random() - magicNumber);
-        // Referência da função de randomizar o array: https://flaviocopes.com/how-to-shuffle-array-javascript/
         const renderAnswers = answers.map((answer, index2) => {
           if (answer === correctAnswer) {
             return (
               <button
                 disabled={ this.changeDisabled() }
                 className={ this.changeClassNameCorrect() }
-                onClick={ () => this.changeAnswerState() }
+                onClick={ () => {
+                  this.changeAnswerState();
+                  this.changeScoreLocalStorage(difficulty);
+                } }
                 key={ answer }
                 type="button"
                 data-testid="correct-answer"
@@ -162,6 +184,8 @@ class Perguntas extends Component {
         );
       });
   }
+
+  // Referência da função de randomizar o array: https://flaviocopes.com/how-to-shuffle-array-javascript/
 
   render() {
     const { avatarLink, name, score, questions, count } = this.state;
