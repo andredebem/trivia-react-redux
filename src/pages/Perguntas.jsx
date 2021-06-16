@@ -28,6 +28,7 @@ class Perguntas extends Component {
     this.changeClassNameIncorrect = this.changeClassNameIncorrect.bind(this);
     this.changeAnswerState = this.changeAnswerState.bind(this);
     this.changeDisabled = this.changeDisabled.bind(this);
+    this.changeScoreLocalStorage = this.changeScoreLocalStorage.bind(this);
   }
 
   componentDidMount() {
@@ -114,12 +115,31 @@ class Perguntas extends Component {
     return false;
   }
 
+  changeScoreLocalStorage(difficulty) {
+    let difficultyNumber = 0;
+    if (difficulty === 'hard') {
+      difficultyNumber = 3;
+    } if (difficulty === 'medium') {
+      difficultyNumber = 2;
+    } if (difficulty === 'easy') {
+      difficultyNumber = 1;
+    }
+    const { count } = this.state;
+    const points = 10;
+    const result = points + (count * difficultyNumber);
+    const state = JSON.parse(localStorage.getItem('state'));
+    let { player: { score } } = state;
+    const newScore = result + score;
+    score = newScore;
+    localStorage.setItem('state', JSON.stringify(state));
+  }
+
   renderQuestions() {
     const { questions } = this.state;
     return questions
       .filter((question, index) => index === 0)
       .map(({
-        category, question, correct_answer: correctAnswer,
+        category, difficulty, question, correct_answer: correctAnswer,
         incorrect_answers: incorrectAnswer }, index) => {
         const magicNumber = 0.5;
         const answers = (incorrectAnswer.concat(correctAnswer))
@@ -131,7 +151,10 @@ class Perguntas extends Component {
               <button
                 disabled={ this.changeDisabled() }
                 className={ this.changeClassNameCorrect() }
-                onClick={ () => this.changeAnswerState() }
+                onClick={ () => {
+                  this.changeAnswerState();
+                  this.changeScoreLocalStorage(difficulty);
+                } }
                 key={ answer }
                 type="button"
                 data-testid="correct-answer"
