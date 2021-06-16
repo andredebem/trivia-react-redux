@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import md5 from 'crypto-js/md5';
 import { connect } from 'react-redux';
+import './style.css';
 import PropTypes from 'prop-types';
 
 class Perguntas extends Component {
@@ -14,6 +15,7 @@ class Perguntas extends Component {
       questions: [],
       intervalId: '',
       count: 30,
+      answerClicked: false,
     };
 
     this.getImageGravatar = this.getImageGravatar.bind(this);
@@ -22,6 +24,9 @@ class Perguntas extends Component {
     this.renderQuestions = this.renderQuestions.bind(this);
     this.setIntervalState = this.setIntervalState.bind(this);
     this.timer = this.timer.bind(this);
+    this.changeClassNameCorrect = this.changeClassNameCorrect.bind(this);
+    this.changeClassNameIncorrect = this.changeClassNameIncorrect.bind(this);
+    this.changeAnswerState = this.changeAnswerState.bind(this);
   }
 
   componentDidMount() {
@@ -78,15 +83,35 @@ class Perguntas extends Component {
       }));
   }
 
+  changeClassNameCorrect() {
+    const { answerClicked } = this.state;
+    if (answerClicked === true) {
+      return 'correct_answer';
+    }
+    return '';
+  }
+
+  changeClassNameIncorrect() {
+    const { answerClicked } = this.state;
+    if (answerClicked === true) {
+      return 'incorrect_answer';
+    }
+    return '';
+  }
+
+  changeAnswerState() {
+    this.setState({
+      answerClicked: true,
+    });
+  }
+
   renderQuestions() {
     const { questions } = this.state;
     return questions
       .filter((question, index) => index === 0)
       .map(({
-        category,
-        question, correct_answer: correctAnswer,
-        incorrect_answers: incorrectAnswer },
-      index) => {
+        category, question, correct_answer: correctAnswer,
+        incorrect_answers: incorrectAnswer }, index) => {
         const magicNumber = 0.5;
         const answers = (incorrectAnswer.concat(correctAnswer))
           .sort(() => Math.random() - magicNumber);
@@ -95,6 +120,8 @@ class Perguntas extends Component {
           if (answer === correctAnswer) {
             return (
               <button
+                className={ this.changeClassNameCorrect() }
+                onClick={ () => this.changeAnswerState() }
                 key={ answer }
                 type="button"
                 data-testid="correct-answer"
@@ -105,6 +132,8 @@ class Perguntas extends Component {
           }
           return (
             <button
+              className={ this.changeClassNameIncorrect() }
+              onClick={ () => this.changeAnswerState() }
               key={ answer }
               type="button"
               data-testid={ `wrong-answer-${index2}` }
