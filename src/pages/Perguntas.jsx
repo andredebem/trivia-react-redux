@@ -12,12 +12,16 @@ class Perguntas extends Component {
       name: '',
       score: 0,
       questions: [],
+      intervalId: '',
+      count: 30,
     };
 
     this.getImageGravatar = this.getImageGravatar.bind(this);
     this.getScoreAndName = this.getScoreAndName.bind(this);
     this.fetchQuestions = this.fetchQuestions.bind(this);
     this.renderQuestions = this.renderQuestions.bind(this);
+    this.setIntervalState = this.setIntervalState.bind(this);
+    this.timer = this.timer.bind(this);
   }
 
   componentDidMount() {
@@ -27,6 +31,18 @@ class Perguntas extends Component {
     this.getImageGravatar(hashEmail);
     this.getScoreAndName(score, name);
     this.fetchQuestions();
+    this.setIntervalState();
+  }
+
+  componentWillUnmount() {
+    const { intervalId } = this.state;
+    clearInterval(intervalId);
+  }
+
+  setIntervalState() {
+    const ONE_SECOND = 1000;
+    const intervalId = setInterval(this.timer, ONE_SECOND);
+    this.setState({ intervalId });
   }
 
   getImageGravatar(hashEmail) {
@@ -43,6 +59,16 @@ class Perguntas extends Component {
     });
   }
 
+  timer() {
+    const { count, intervalId } = this.state;
+    const newCount = count - 1;
+    if (newCount >= 0) {
+      this.setState({ count: newCount });
+    } else {
+      clearInterval(intervalId);
+    }
+  }
+
   fetchQuestions() {
     const { token } = this.props;
     fetch(`https://opentdb.com/api.php?amount=5&token=${token}`)
@@ -55,6 +81,7 @@ class Perguntas extends Component {
   renderQuestions() {
     const { questions } = this.state;
     return questions
+      .filter((question, index) => index === 0)
       .map(({
         category,
         question, correct_answer: correctAnswer,
@@ -97,7 +124,7 @@ class Perguntas extends Component {
   }
 
   render() {
-    const { avatarLink, name, score, questions } = this.state;
+    const { avatarLink, name, score, questions, count } = this.state;
     return (
       <div>
         <header>
@@ -111,6 +138,9 @@ class Perguntas extends Component {
         </header>
         <main>
           { questions.length > 0 && this.renderQuestions() }
+          <section>
+            { count }
+          </section>
         </main>
       </div>
     );
@@ -124,5 +154,20 @@ const mapStateTopProps = (state) => ({
 Perguntas.propTypes = {
   token: PropTypes.string.isRequired,
 };
+
+/* <html>
+    <head>
+        <title>Page Title</title>
+    </head>
+    <body>
+       <h1 id="head">Good Night</h1>
+       <script>
+           const head = document.getElementById("head");
+           const msgs = ["Hello", "Hi", "Good morning", "Good night"];
+      var i = 0;
+setInterval(() => (i==msgs.length)?(i=0):(head.innerHTML = msgs[++i]), 2000);
+       </script>
+    </body>
+</html> */
 
 export default connect(mapStateTopProps, null)(Perguntas);
