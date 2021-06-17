@@ -3,11 +3,11 @@ import md5 from 'crypto-js/md5';
 import { connect } from 'react-redux';
 import './style.css';
 import PropTypes from 'prop-types';
+import Feedback from '../components/Feedback.jsx';
 
 class Perguntas extends Component {
   constructor() {
     super();
-
     this.state = {
       avatarLink: '',
       name: '',
@@ -17,6 +17,7 @@ class Perguntas extends Component {
       count: 30,
       answerClicked: false,
       buttonNext: false,
+      indexQuestions: 0,
     };
 
     this.getImageGravatar = this.getImageGravatar.bind(this);
@@ -31,6 +32,8 @@ class Perguntas extends Component {
     this.changeDisabled = this.changeDisabled.bind(this);
     this.changeScoreLocalStorage = this.changeScoreLocalStorage.bind(this);
     this.renderNextButton = this.renderNextButton.bind(this);
+    this.nextButtonClicked = this.nextButtonClicked.bind(this);
+    this.renderQuestionsOrFeedback = this.renderQuestionsOrFeedback.bind(this);
   }
 
   componentDidMount() {
@@ -111,8 +114,8 @@ class Perguntas extends Component {
   }
 
   changeDisabled() {
-    const { count } = this.state;
-    if (count === 0) {
+    const { count, answerClicked } = this.state;
+    if (count === 0 || answerClicked) {
       return true;
     }
     return false;
@@ -138,9 +141,9 @@ class Perguntas extends Component {
   }
 
   renderQuestions() {
-    const { questions } = this.state;
+    const { questions, indexQuestions } = this.state;
     return questions
-      .filter((question, index) => index === 0)
+      .filter((question, index) => index === indexQuestions)
       .map(({
         category, difficulty, question, correct_answer: correctAnswer,
         incorrect_answers: incorrectAnswer }, index) => {
@@ -190,10 +193,42 @@ class Perguntas extends Component {
 
   // Referência da função de randomizar o array: https://flaviocopes.com/how-to-shuffle-array-javascript/
 
+  nextButtonClicked() {
+    const { indexQuestions } = this.state;
+    const ONE_SECOND = 1000;
+    const intervalId = setInterval(this.timer, ONE_SECOND);
+    this.setState({
+      buttonNext: false,
+      answerClicked: false,
+      intervalId,
+      count: 30,
+      indexQuestions: indexQuestions + 1,
+    });
+  }
+
   renderNextButton() {
     return (
-      <button type="button" data-testid="btn-next">Próxima</button>
+      <button
+        type="button"
+        data-testid="btn-next"
+        onClick={ () => this.nextButtonClicked() }
+      >
+        Próxima
+      </button>
     );
+  }
+
+  renderQuestionsOrFeedback() {
+    const { questions, indexQuestions } = this.state;
+    if (questions.length > 0) {
+      if (indexQuestions < 5) {
+        return this.renderQuestions();
+      } else {
+        return (
+          <Feedback />
+        );
+      }
+    }
   }
 
   render() {
@@ -210,7 +245,7 @@ class Perguntas extends Component {
           <span data-testid="header-score">{ score }</span>
         </header>
         <main>
-          { questions.length > 0 && this.renderQuestions() }
+          { this.renderQuestionsOrFeedback() }
           { buttonNext && this.renderNextButton() }
           <section>
             { count }
