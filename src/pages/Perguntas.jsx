@@ -16,6 +16,7 @@ class Perguntas extends Component {
       intervalId: '',
       count: 30,
       answerClicked: false,
+      buttonNext: false,
     };
 
     this.getImageGravatar = this.getImageGravatar.bind(this);
@@ -29,6 +30,7 @@ class Perguntas extends Component {
     this.changeAnswerState = this.changeAnswerState.bind(this);
     this.changeDisabled = this.changeDisabled.bind(this);
     this.changeScoreLocalStorage = this.changeScoreLocalStorage.bind(this);
+    this.renderNextButton = this.renderNextButton.bind(this);
   }
 
   componentDidMount() {
@@ -104,6 +106,7 @@ class Perguntas extends Component {
   changeAnswerState() {
     this.setState({
       answerClicked: true,
+      buttonNext: true,
     });
   }
 
@@ -187,8 +190,14 @@ class Perguntas extends Component {
 
   // Referência da função de randomizar o array: https://flaviocopes.com/how-to-shuffle-array-javascript/
 
+  renderNextButton() {
+    return (
+      <button type="button" data-testid="btn-next">Próxima</button>
+    );
+  }
+
   render() {
-    const { avatarLink, name, score, questions, count } = this.state;
+    const { avatarLink, name, score, questions, count, buttonNext } = this.state;
     return (
       <div>
         <header>
@@ -202,6 +211,7 @@ class Perguntas extends Component {
         </header>
         <main>
           { questions.length > 0 && this.renderQuestions() }
+          { buttonNext && this.renderNextButton() }
           <section>
             { count }
           </section>
