@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import './style.css';
 import PropTypes from 'prop-types';
 import Feedback from '../components/Feedback.jsx';
+import Questions from '../components/Questions.jsx';
 
 class Perguntas extends Component {
   constructor() {
@@ -23,7 +24,6 @@ class Perguntas extends Component {
     this.getImageGravatar = this.getImageGravatar.bind(this);
     this.getScoreAndName = this.getScoreAndName.bind(this);
     this.fetchQuestions = this.fetchQuestions.bind(this);
-    this.renderQuestions = this.renderQuestions.bind(this);
     this.setIntervalState = this.setIntervalState.bind(this);
     this.timer = this.timer.bind(this);
     this.changeClassNameCorrect = this.changeClassNameCorrect.bind(this);
@@ -140,59 +140,6 @@ class Perguntas extends Component {
     localStorage.setItem('state', JSON.stringify(stateObject));
   }
 
-  renderQuestions() {
-    const { questions, indexQuestions } = this.state;
-    return questions
-      .filter((question, index) => index === indexQuestions)
-      .map(({
-        category, difficulty, question, correct_answer: correctAnswer,
-        incorrect_answers: incorrectAnswer }, index) => {
-        const magicNumber = 0.5;
-        const answers = (incorrectAnswer.concat(correctAnswer))
-          .sort(() => Math.random() - magicNumber);
-        const renderAnswers = answers.map((answer, index2) => {
-          if (answer === correctAnswer) {
-            return (
-              <button
-                disabled={ this.changeDisabled() }
-                className={ this.changeClassNameCorrect() }
-                onClick={ () => {
-                  this.changeAnswerState();
-                  this.changeScoreLocalStorage(difficulty);
-                } }
-                key={ answer }
-                type="button"
-                data-testid="correct-answer"
-              >
-                {answer}
-              </button>
-            );
-          }
-          return (
-            <button
-              disabled={ this.changeDisabled() }
-              className={ this.changeClassNameIncorrect() }
-              onClick={ () => this.changeAnswerState() }
-              key={ answer }
-              type="button"
-              data-testid={ `wrong-answer-${index2}` }
-            >
-              {answer}
-            </button>
-          );
-        });
-        return (
-          <div key={ index }>
-            <p key={ category } data-testid="question-category">{ category }</p>
-            <p key={ question } data-testid="question-text">{ question }</p>
-            { renderAnswers }
-          </div>
-        );
-      });
-  }
-
-  // Referência da função de randomizar o array: https://flaviocopes.com/how-to-shuffle-array-javascript/
-
   nextButtonClicked() {
     const { indexQuestions } = this.state;
     const ONE_SECOND = 1000;
@@ -222,12 +169,21 @@ class Perguntas extends Component {
     const { questions, indexQuestions } = this.state;
     if (questions.length > 0) {
       if (indexQuestions < 5) {
-        return this.renderQuestions();
-      } else {
         return (
-          <Feedback />
+          <Questions
+            questions={ questions }
+            indexQuestions={ indexQuestions }
+            changeDisabled={ this.changeDisabled }
+            changeClassNameCorrect={ this.changeClassNameCorrect }
+            changeClassName={ this.changeClassNameIncorrect }
+            changeAnswerState={ this.changeAnswerState }
+            changeScoreLocalStorage={ this.changeScoreLocalStorage }
+          />
         );
       }
+      return (
+        <Feedback />
+      );
     }
   }
 
