@@ -123,7 +123,7 @@ class Perguntas extends Component {
     return false;
   }
 
-  changeScoreLocalStorage(difficulty) {
+  defineDifficult(difficulty) {
     let difficultyNumber = 0;
     if (difficulty === 'hard') {
       const THREE = 3;
@@ -133,13 +133,19 @@ class Perguntas extends Component {
     } if (difficulty === 'easy') {
       difficultyNumber = 1;
     }
-    const { count } = this.state;
+    return difficultyNumber;
+  }
+
+  changeScoreLocalStorage(difficulty) {
+    const difficultyNumber = this.defineDifficult(difficulty);
+    const { count, name } = this.state;
     const points = 10;
     const result = points + (count * difficultyNumber);
     const stateObject = JSON.parse(localStorage.getItem('state'));
     const { player: { score } } = stateObject;
     stateObject.player.score = result + score;
     localStorage.setItem('state', JSON.stringify(stateObject));
+    this.getScoreAndName((result + score), name);
   }
 
   nextButtonClicked() {
