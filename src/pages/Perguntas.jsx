@@ -178,7 +178,7 @@ class Perguntas extends Component {
   }
 
   renderQuestionsOrFeedback() {
-    const { questions, indexQuestions, correctQty } = this.state;
+    const { questions, indexQuestions, correctQty, score } = this.state;
     if (questions.length > 0) {
       const FIVE = 5;
       if (indexQuestions < FIVE) {
@@ -195,7 +195,7 @@ class Perguntas extends Component {
         );
       }
       return (
-        <Feedback correctQty={ correctQty } />
+        <Feedback correctQty={ correctQty } score={ score } />
       );
     }
   }
