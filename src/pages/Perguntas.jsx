@@ -19,6 +19,7 @@ class Perguntas extends Component {
       answerClicked: false,
       buttonNext: false,
       indexQuestions: 0,
+      correctQty: 0,
     };
 
     this.getImageGravatar = this.getImageGravatar.bind(this);
@@ -138,7 +139,7 @@ class Perguntas extends Component {
 
   changeScoreLocalStorage(difficulty) {
     const difficultyNumber = this.defineDifficult(difficulty);
-    const { count, name } = this.state;
+    const { count, name, correctQty } = this.state;
     const points = 10;
     const result = points + (count * difficultyNumber);
     const stateObject = JSON.parse(localStorage.getItem('state'));
@@ -146,6 +147,9 @@ class Perguntas extends Component {
     stateObject.player.score = result + score;
     localStorage.setItem('state', JSON.stringify(stateObject));
     this.getScoreAndName((result + score), name);
+    this.setState({
+      correctQty: correctQty + 1,
+    });
   }
 
   nextButtonClicked() {
@@ -174,7 +178,7 @@ class Perguntas extends Component {
   }
 
   renderQuestionsOrFeedback() {
-    const { questions, indexQuestions } = this.state;
+    const { questions, indexQuestions, correctQty } = this.state;
     if (questions.length > 0) {
       const FIVE = 5;
       if (indexQuestions < FIVE) {
@@ -191,7 +195,7 @@ class Perguntas extends Component {
         );
       }
       return (
-        <Feedback />
+        <Feedback correctQty={ correctQty } />
       );
     }
   }
