@@ -3,8 +3,8 @@ import md5 from 'crypto-js/md5';
 import { connect } from 'react-redux';
 import './style.css';
 import PropTypes from 'prop-types';
-import Feedback from '../components/Feedback.jsx';
-import Questions from '../components/Questions.jsx';
+import Feedback from '../components/Feedback';
+import Questions from '../components/Questions';
 
 class Perguntas extends Component {
   constructor() {
@@ -107,10 +107,12 @@ class Perguntas extends Component {
   }
 
   changeAnswerState() {
+    const { intervalId } = this.state;
     this.setState({
       answerClicked: true,
       buttonNext: true,
     });
+    clearInterval(intervalId);
   }
 
   changeDisabled() {
@@ -168,14 +170,15 @@ class Perguntas extends Component {
   renderQuestionsOrFeedback() {
     const { questions, indexQuestions } = this.state;
     if (questions.length > 0) {
-      if (indexQuestions < 5) {
+      const FIVE = 5;
+      if (indexQuestions < FIVE) {
         return (
           <Questions
             questions={ questions }
             indexQuestions={ indexQuestions }
             changeDisabled={ this.changeDisabled }
             changeClassNameCorrect={ this.changeClassNameCorrect }
-            changeClassName={ this.changeClassNameIncorrect }
+            changeClassNameIncorrect={ this.changeClassNameIncorrect }
             changeAnswerState={ this.changeAnswerState }
             changeScoreLocalStorage={ this.changeScoreLocalStorage }
           />
@@ -188,7 +191,7 @@ class Perguntas extends Component {
   }
 
   render() {
-    const { avatarLink, name, score, questions, count, buttonNext } = this.state;
+    const { avatarLink, name, score, count, buttonNext } = this.state;
     return (
       <div>
         <header>
@@ -219,20 +222,5 @@ const mapStateTopProps = (state) => ({
 Perguntas.propTypes = {
   token: PropTypes.string.isRequired,
 };
-
-/* <html>
-    <head>
-        <title>Page Title</title>
-    </head>
-    <body>
-       <h1 id="head">Good Night</h1>
-       <script>
-           const head = document.getElementById("head");
-           const msgs = ["Hello", "Hi", "Good morning", "Good night"];
-      var i = 0;
-setInterval(() => (i==msgs.length)?(i=0):(head.innerHTML = msgs[++i]), 2000);
-       </script>
-    </body>
-</html> */
 
 export default connect(mapStateTopProps, null)(Perguntas);
