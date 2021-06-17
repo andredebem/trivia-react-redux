@@ -3,11 +3,12 @@ import md5 from 'crypto-js/md5';
 import { connect } from 'react-redux';
 import './style.css';
 import PropTypes from 'prop-types';
+import Feedback from '../components/Feedback';
+import Questions from '../components/Questions';
 
 class Perguntas extends Component {
   constructor() {
     super();
-
     this.state = {
       avatarLink: '',
       name: '',
@@ -17,12 +18,12 @@ class Perguntas extends Component {
       count: 30,
       answerClicked: false,
       buttonNext: false,
+      indexQuestions: 0,
     };
 
     this.getImageGravatar = this.getImageGravatar.bind(this);
     this.getScoreAndName = this.getScoreAndName.bind(this);
     this.fetchQuestions = this.fetchQuestions.bind(this);
-    this.renderQuestions = this.renderQuestions.bind(this);
     this.setIntervalState = this.setIntervalState.bind(this);
     this.timer = this.timer.bind(this);
     this.changeClassNameCorrect = this.changeClassNameCorrect.bind(this);
@@ -31,6 +32,8 @@ class Perguntas extends Component {
     this.changeDisabled = this.changeDisabled.bind(this);
     this.changeScoreLocalStorage = this.changeScoreLocalStorage.bind(this);
     this.renderNextButton = this.renderNextButton.bind(this);
+    this.nextButtonClicked = this.nextButtonClicked.bind(this);
+    this.renderQuestionsOrFeedback = this.renderQuestionsOrFeedback.bind(this);
   }
 
   componentDidMount() {
@@ -104,15 +107,17 @@ class Perguntas extends Component {
   }
 
   changeAnswerState() {
+    const { intervalId } = this.state;
     this.setState({
       answerClicked: true,
       buttonNext: true,
     });
+    clearInterval(intervalId);
   }
 
   changeDisabled() {
-    const { count } = this.state;
-    if (count === 0) {
+    const { count, answerClicked } = this.state;
+    if (count === 0 || answerClicked) {
       return true;
     }
     return false;
@@ -137,67 +142,56 @@ class Perguntas extends Component {
     localStorage.setItem('state', JSON.stringify(stateObject));
   }
 
-  renderQuestions() {
-    const { questions } = this.state;
-    return questions
-      .filter((question, index) => index === 0)
-      .map(({
-        category, difficulty, question, correct_answer: correctAnswer,
-        incorrect_answers: incorrectAnswer }, index) => {
-        const magicNumber = 0.5;
-        const answers = (incorrectAnswer.concat(correctAnswer))
-          .sort(() => Math.random() - magicNumber);
-        const renderAnswers = answers.map((answer, index2) => {
-          if (answer === correctAnswer) {
-            return (
-              <button
-                disabled={ this.changeDisabled() }
-                className={ this.changeClassNameCorrect() }
-                onClick={ () => {
-                  this.changeAnswerState();
-                  this.changeScoreLocalStorage(difficulty);
-                } }
-                key={ answer }
-                type="button"
-                data-testid="correct-answer"
-              >
-                {answer}
-              </button>
-            );
-          }
-          return (
-            <button
-              disabled={ this.changeDisabled() }
-              className={ this.changeClassNameIncorrect() }
-              onClick={ () => this.changeAnswerState() }
-              key={ answer }
-              type="button"
-              data-testid={ `wrong-answer-${index2}` }
-            >
-              {answer}
-            </button>
-          );
-        });
-        return (
-          <div key={ index }>
-            <p key={ category } data-testid="question-category">{ category }</p>
-            <p key={ question } data-testid="question-text">{ question }</p>
-            { renderAnswers }
-          </div>
-        );
-      });
+  nextButtonClicked() {
+    const { indexQuestions } = this.state;
+    const ONE_SECOND = 1000;
+    const intervalId = setInterval(this.timer, ONE_SECOND);
+    this.setState({
+      buttonNext: false,
+      answerClicked: false,
+      intervalId,
+      count: 30,
+      indexQuestions: indexQuestions + 1,
+    });
   }
-
-  // Referência da função de randomizar o array: https://flaviocopes.com/how-to-shuffle-array-javascript/
 
   renderNextButton() {
     return (
-      <button type="button" data-testid="btn-next">Próxima</button>
+      <button
+        type="button"
+        data-testid="btn-next"
+        onClick={ () => this.nextButtonClicked() }
+      >
+        Próxima
+      </button>
     );
   }
 
+  renderQuestionsOrFeedback() {
+    const { questions, indexQuestions } = this.state;
+    if (questions.length > 0) {
+      const FIVE = 5;
+      if (indexQuestions < FIVE) {
+        return (
+          <Questions
+            questions={ questions }
+            indexQuestions={ indexQuestions }
+            changeDisabled={ this.changeDisabled }
+            changeClassNameCorrect={ this.changeClassNameCorrect }
+            changeClassNameIncorrect={ this.changeClassNameIncorrect }
+            changeAnswerState={ this.changeAnswerState }
+            changeScoreLocalStorage={ this.changeScoreLocalStorage }
+          />
+        );
+      }
+      return (
+        <Feedback />
+      );
+    }
+  }
+
   render() {
-    const { avatarLink, name, score, questions, count, buttonNext } = this.state;
+    const { avatarLink, name, score, count, buttonNext } = this.state;
     return (
       <div>
         <header>
@@ -210,7 +204,7 @@ class Perguntas extends Component {
           <span data-testid="header-score">{ score }</span>
         </header>
         <main>
-          { questions.length > 0 && this.renderQuestions() }
+          { this.renderQuestionsOrFeedback() }
           { buttonNext && this.renderNextButton() }
           <section>
             { count }
@@ -228,20 +222,5 @@ const mapStateTopProps = (state) => ({
 Perguntas.propTypes = {
   token: PropTypes.string.isRequired,
 };
-
-/* <html>
-    <head>
-        <title>Page Title</title>
-    </head>
-    <body>
-       <h1 id="head">Good Night</h1>
-       <script>
-           const head = document.getElementById("head");
-           const msgs = ["Hello", "Hi", "Good morning", "Good night"];
-      var i = 0;
-setInterval(() => (i==msgs.length)?(i=0):(head.innerHTML = msgs[++i]), 2000);
-       </script>
-    </body>
-</html> */
 
 export default connect(mapStateTopProps, null)(Perguntas);
