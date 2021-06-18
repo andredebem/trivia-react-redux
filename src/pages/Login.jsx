@@ -70,6 +70,9 @@ class Login extends Component {
     this.setState({
       redirect: true,
     });
+    if (localStorage.getItem('ranking') === null) {
+      localStorage.setItem('ranking', JSON.stringify([]));
+    }
   }
 
   render() {
