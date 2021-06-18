@@ -62,6 +62,7 @@ class Login extends Component {
         name,
         gravatarEmail: email,
         score: 0,
+        assertions: 0,
       },
     };
     localStorage.setItem('token', token);

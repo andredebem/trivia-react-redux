@@ -8,6 +8,12 @@ export default class Feedback extends Component {
     this.renderMessage = this.renderMessage.bind(this);
   }
 
+  // getScoreOfLocalStorage() {
+  //   const state = JSON.parse(localStorage.getItem('state'));
+  //   const { player: { score } } = state;
+  //   return score;
+  // }
+
   renderMessage() {
     const { correctQty } = this.props;
     const THREE = 3;
@@ -18,8 +24,11 @@ export default class Feedback extends Component {
   }
 
   render() {
+    const { correctQty, score } = this.props;
     return (
       <div>
+        <span data-testid="feedback-total-question">{ correctQty }</span>
+        <span data-testid="feedback-total-score">{ score }</span>
         <span data-testid="feedback-text">{ this.renderMessage() }</span>
       </div>
     );
@@ -28,4 +37,5 @@ export default class Feedback extends Component {
 
 Feedback.propTypes = {
   correctQty: PropTypes.number.isRequired,
+  score: PropTypes.number.isRequired,
 };
