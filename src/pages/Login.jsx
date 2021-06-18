@@ -5,6 +5,9 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { fetchToken } from '../redux/actions/tokenAction';
 
+import '../CSS/bootstrap.min.css';
+import '../CSS/background.css';
+
 class Login extends Component {
   constructor() {
     super();
@@ -72,45 +75,66 @@ class Login extends Component {
     });
   }
 
+  // eslint-disable-next-line max-lines-per-function
   render() {
     const { invalid, redirect } = this.state;
     if (redirect) {
       return <Redirect to="/questions" />;
     }
     return (
-      <form>
-        <label htmlFor="name">
-          Nome:
-          <input
-            data-testid="input-player-name"
-            type="text"
-            name="name"
-            onChange={ this.handleChange }
-          />
-        </label>
-        <label htmlFor="email">
-          Email:
-          <input
-            data-testid="input-gravatar-email"
-            type="email"
-            name="email"
-            onChange={ this.handleChange }
-          />
-        </label>
-        <button
-          type="button"
-          data-testid="btn-play"
-          disabled={ invalid }
-          onClick={ () => this.saveToken() }
-        >
-          Jogar
-        </button>
-        <Link to="/settings">
-          <button type="button" data-testid="btn-settings">
-            Configurações
-          </button>
-        </Link>
-      </form>
+      <div>
+        <div className="vh-100 d-flex align-items-center justify-content-center">
+          <form>
+            <div className="mb-3 text-center">
+              <img src="https://media.giphy.com/media/NEvPzZ8bd1V4Y/giphy.gif" className="rounded" style={ { maxWidth: '150px' } } alt="" />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="name" className="form-label">
+                Nome:
+                <input
+                  className="form-control"
+                  data-testid="input-player-name"
+                  type="text"
+                  name="name"
+                  onChange={ this.handleChange }
+                />
+              </label>
+            </div>
+            <div className="mb-3">
+              <label htmlFor="email" className="form-label">
+                Email:
+                <input
+                  className="form-control"
+                  data-testid="input-gravatar-email"
+                  type="email"
+                  name="email"
+                  onChange={ this.handleChange }
+                />
+              </label>
+            </div>
+            <div className="mb-3 text-center">
+              <button
+                className="btn btn-primary me-1"
+                type="button"
+                data-testid="btn-play"
+                disabled={ invalid }
+                onClick={ () => this.saveToken() }
+              >
+                Jogar
+              </button>
+              <Link to="/settings">
+                <button
+                  type="button"
+                  data-testid="btn-settings"
+                  className="btn btn-danger ms-1"
+                >
+                  Configurações
+                </button>
+              </Link>
+            </div>
+          </form>
+        </div>
+      </div>
     );
   }
 }

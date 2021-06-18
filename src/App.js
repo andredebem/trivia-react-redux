@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router';
 import Login from './pages/Login';
 import Perguntas from './pages/Perguntas';
 import Settings from './pages/Settings';
-import './App.css';
+// import './App.css';
 
 export default function App() {
   return (
