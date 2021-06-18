@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 export default class Feedback extends Component {
   constructor() {
@@ -7,12 +8,6 @@ export default class Feedback extends Component {
 
     this.renderMessage = this.renderMessage.bind(this);
   }
-
-  // getScoreOfLocalStorage() {
-  //   const state = JSON.parse(localStorage.getItem('state'));
-  //   const { player: { score } } = state;
-  //   return score;
-  // }
 
   renderMessage() {
     const { correctQty } = this.props;
@@ -30,6 +25,9 @@ export default class Feedback extends Component {
         <span data-testid="feedback-total-question">{ correctQty }</span>
         <span data-testid="feedback-total-score">{ score }</span>
         <span data-testid="feedback-text">{ this.renderMessage() }</span>
+        <Link to="/">
+          <button type="button" data-testid="btn-play-again">Jogar novamente </button>
+        </Link>
       </div>
     );
   }
