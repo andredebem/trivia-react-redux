@@ -82,58 +82,57 @@ class Login extends Component {
       return <Redirect to="/questions" />;
     }
     return (
-      <div>
-        <div className="vh-100 d-flex align-items-center justify-content-center">
-          <form>
-            <div className="mb-3 text-center">
-              <img src="https://media.giphy.com/media/NEvPzZ8bd1V4Y/giphy.gif" className="rounded" style={ { maxWidth: '150px' } } alt="" />
-            </div>
-            <div className="mb-3">
-              <label htmlFor="name" className="form-label">
-                Nome:
-                <input
-                  className="form-control"
-                  data-testid="input-player-name"
-                  type="text"
-                  name="name"
-                  onChange={ this.handleChange }
-                />
-              </label>
-            </div>
-            <div className="mb-3">
-              <label htmlFor="email" className="form-label">
-                Email:
-                <input
-                  className="form-control"
-                  data-testid="input-gravatar-email"
-                  type="email"
-                  name="email"
-                  onChange={ this.handleChange }
-                />
-              </label>
-            </div>
-            <div className="mb-3 text-center">
+      <div className="vh-100 d-flex align-items-center justify-content-center">
+        <form>
+          <h1 style={ { color: 'white' } }>TRIVIA ONLINE</h1>
+          <div className="mb-3 text-center">
+            <img src="https://media.giphy.com/media/NEvPzZ8bd1V4Y/giphy.gif" className="rounded border border-secondary" style={ { maxWidth: '150px' } } alt="" />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="name" className="form-label" style={ { color: 'white' } }>
+              Nome:
+              <input
+                className="form-control"
+                data-testid="input-player-name"
+                type="text"
+                name="name"
+                onChange={ this.handleChange }
+              />
+            </label>
+          </div>
+          <div className="mb-3">
+            <label htmlFor="email" className="form-label" style={ { color: 'white' } }>
+              Email:
+              <input
+                className="form-control"
+                data-testid="input-gravatar-email"
+                type="email"
+                name="email"
+                onChange={ this.handleChange }
+              />
+            </label>
+          </div>
+          <div className="mb-3 text-center">
+            <button
+              className="btn btn-primary me-1"
+              type="button"
+              data-testid="btn-play"
+              disabled={ invalid }
+              onClick={ () => this.saveToken() }
+            >
+              Jogar
+            </button>
+            <Link to="/settings">
               <button
-                className="btn btn-primary me-1"
                 type="button"
-                data-testid="btn-play"
-                disabled={ invalid }
-                onClick={ () => this.saveToken() }
+                data-testid="btn-settings"
+                className="btn btn-danger ms-1"
               >
-                Jogar
+                Configurações
               </button>
-              <Link to="/settings">
-                <button
-                  type="button"
-                  data-testid="btn-settings"
-                  className="btn btn-danger ms-1"
-                >
-                  Configurações
-                </button>
-              </Link>
-            </div>
-          </form>
-        </div>
+            </Link>
+          </div>
+        </form>
       </div>
     );
   }
