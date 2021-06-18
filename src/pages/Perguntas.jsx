@@ -194,6 +194,9 @@ class Perguntas extends Component {
           />
         );
       }
+      const stateObject = JSON.parse(localStorage.getItem('state'));
+      stateObject.player.assertions = correctQty;
+      localStorage.setItem('state', JSON.stringify(stateObject));
       return (
         <Feedback correctQty={ correctQty } score={ score } />
       );

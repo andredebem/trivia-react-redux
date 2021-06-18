@@ -8,12 +8,6 @@ export default class Feedback extends Component {
     this.renderMessage = this.renderMessage.bind(this);
   }
 
-  componentDidMount() {
-    const stateObject = JSON.parse(localStorage.getItem('state'));
-    stateObject.player.score = 0;
-    localStorage.setItem('state', JSON.stringify(stateObject));
-  }
-
   // getScoreOfLocalStorage() {
   //   const state = JSON.parse(localStorage.getItem('state'));
   //   const { player: { score } } = state;
@@ -33,7 +27,7 @@ export default class Feedback extends Component {
     const { correctQty, score } = this.props;
     return (
       <div>
-        <span data-testid="feedback-total-question ">{ correctQty }</span>
+        <span data-testid="feedback-total-question">{ correctQty }</span>
         <span data-testid="feedback-total-score">{ score }</span>
         <span data-testid="feedback-text">{ this.renderMessage() }</span>
       </div>
