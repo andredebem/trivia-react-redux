@@ -29,7 +29,7 @@ export default class Feedback extends Component {
           <button type="button" data-testid="btn-play-again">Jogar novamente </button>
         </Link>
         <Link to="/ranking">
-          <button type="button" data-testid="btn-ranking">JRanking </button>
+          <button type="button" data-testid="btn-ranking">Ranking </button>
         </Link>
       </div>
     );
