@@ -21,7 +21,7 @@ export default class Feedback extends Component {
   render() {
     const { correctQty, score } = this.props;
     return (
-      <div>
+      <div style={ { color: 'white' } }>
         <span data-testid="feedback-total-question">{ correctQty }</span>
         <span data-testid="feedback-total-score">{ score }</span>
         <span data-testid="feedback-text">{ this.renderMessage() }</span>

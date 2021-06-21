@@ -213,13 +213,18 @@ class Perguntas extends Component {
             alt="user avatar"
             data-testid="header-profile-picture"
           />
-          <span data-testid="header-player-name">{ name }</span>
-          <span data-testid="header-score">{ score }</span>
+          <span
+            style={ { color: 'white' } }
+            data-testid="header-player-name"
+          >
+            { name }
+          </span>
+          <span style={ { color: 'white' } } data-testid="header-score">{ score }</span>
         </header>
         <main>
           { this.renderQuestionsOrFeedback() }
           { buttonNext && this.renderNextButton() }
-          <section>
+          <section style={ { color: 'white' } }>
             { count }
           </section>
         </main>

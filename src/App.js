@@ -4,7 +4,7 @@ import Login from './pages/Login';
 import Ranking from './pages/Ranking';
 import Perguntas from './pages/Perguntas';
 import Settings from './pages/Settings';
-import './App.css';
+// import './App.css';
 
 export default function App() {
   return (
