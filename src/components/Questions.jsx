@@ -73,7 +73,7 @@ export default class Questions extends Component {
           );
         });
         return (
-          <div key={ index }>
+          <div style={ { color: 'white' } } key={ index }>
             <p key={ category } data-testid="question-category">{ category }</p>
             <p key={ question } data-testid="question-text">{ question }</p>
             { renderAnswers }

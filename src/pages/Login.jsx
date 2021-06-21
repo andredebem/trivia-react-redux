@@ -75,7 +75,6 @@ class Login extends Component {
     });
   }
 
-  // eslint-disable-next-line max-lines-per-function
   render() {
     const { invalid, redirect } = this.state;
     if (redirect) {
