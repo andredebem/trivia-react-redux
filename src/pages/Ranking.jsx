@@ -60,7 +60,7 @@ export default class Ranking extends Component {
   render() {
     const { render } = this.state;
     return (
-      <section>
+      <section style={ { color: 'white' } }>
         <h1 data-testid="ranking-title">Ranking</h1>
         { render && this.renderRanking() }
         <Link to="/">
